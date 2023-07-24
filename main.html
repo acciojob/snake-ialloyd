@@ -57,44 +57,42 @@
         }
         createFood();
 
-        // update snake
-        function updateSnake() {
-            // remove tail
-            const tail = snake.pop();
-            document.querySelector(`#pixel${tail.x}-${tail.y}`).classList.remove('snakeBodyPixel');
+       // update snake
+function updateSnake() {
+    // add new head
+    let newHead;
+    if (direction === 'right') {
+        newHead = {x: (snake[0].x + 1) % 40, y: snake[0].y};
+    } else if (direction === 'left') {
+        newHead = {x: (snake[0].x - 1 + 40) % 40, y: snake[0].y};
+    } else if (direction === 'up') {
+        newHead = {x: snake[0].x, y: (snake[0].y - 1 + 40) % 40};
+    } else if (direction === 'down') {
+        newHead = {x: snake[0].x, y: (snake[0].y + 1) % 40};
+    }
+    snake.unshift(newHead);
 
-            // add new head
-            let newHead;
-            if (direction === 'right') {
-                newHead = {x: (snake[0].x + 1) % 40, y: snake[0].y};
-            } else if (direction === 'left') {
-                newHead = {x: (snake[0].x - 1 + 40) % 40, y: snake[0].y};
-            } else if (direction === 'up') {
-                newHead = {x: snake[0].x, y: (snake[0].y - 1 + 40) % 40};
-            } else if (direction === 'down') {
-                newHead = {x: snake[0].x, y: (snake[0].y + 1) % 40};
-            }
-            snake.unshift(newHead);
+    // check if game over
+    if (snake.slice(1).some(pixel => pixel.x === newHead.x && pixel.y === newHead.y)) {
+        alert(`Game Over! Your score is ${score}`);
+        location.reload();
+        return;
+    }
 
-            // check if game over
-            if (snake.slice(1).some(pixel => pixel.x === newHead.x && pixel.y === newHead.y)) {
-                alert(`Game Over! Your score is ${score}`);
-                location.reload();
-                return;
-            }
+    // check if eat food
+    if (newHead.x === food.x && newHead.y === food.y) {
+        score++;
+        scoreBoard.textContent = score;
+        createFood();
+    } else {
+        // remove tail
+        const tail = snake.pop();
+        document.querySelector(`#pixel${tail.x}-${tail.y}`).classList.remove('snakeBodyPixel');
+    }
 
-            // check if eat food
-            if (newHead.x === food.x && newHead.y === food.y) {
-                score++;
-                scoreBoard.textContent = score;
-                createFood();
-                snake.push(tail);
-                document.querySelector(`#pixel${tail.x}-${tail.y}`).classList.add('snakeBodyPixel');
-            }
-
-            // update head
-            document.querySelector(`#pixel${newHead.x}-${newHead.y}`).classList.add('snakeBodyPixel');
-        }
+    // update head
+    document.querySelector(`#pixel${newHead.x}-${newHead.y}`).classList.add('snakeBodyPixel');
+}
 
         // start moving
         setInterval(updateSnake, 100);
