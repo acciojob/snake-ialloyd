@@ -66,18 +66,18 @@
             // add new head
             let newHead;
             if (direction === 'right') {
-                newHead = {x: snake[0].x + 1, y: snake[0].y};
+                newHead = {x: (snake[0].x + 1) % 40, y: snake[0].y};
             } else if (direction === 'left') {
-                newHead = {x: snake[0].x - 1, y: snake[0].y};
+                newHead = {x: (snake[0].x - 1 + 40) % 40, y: snake[0].y};
             } else if (direction === 'up') {
-                newHead = {x: snake[0].x, y: snake[0].y - 1};
+                newHead = {x: snake[0].x, y: (snake[0].y - 1 + 40) % 40};
             } else if (direction === 'down') {
-                newHead = {x: snake[0].x, y: snake[0].y + 1};
+                newHead = {x: snake[0].x, y: (snake[0].y + 1) % 40};
             }
             snake.unshift(newHead);
 
             // check if game over
-            if (newHead.x < 0 || newHead.x >= 40 || newHead.y < 0 || newHead.y >= 40) {
+            if (snake.slice(1).some(pixel => pixel.x === newHead.x && pixel.y === newHead.y)) {
                 alert(`Game Over! Your score is ${score}`);
                 location.reload();
                 return;
@@ -101,13 +101,13 @@
 
         // listen to keydown event
         document.addEventListener('keydown', event => {
-            if (event.key === 'ArrowRight') {
+            if (event.key === 'ArrowRight' && direction !== 'left') {
                 direction = 'right';
-            } else if (event.key === 'ArrowLeft') {
+            } else if (event.key === 'ArrowLeft' && direction !== 'right') {
                 direction = 'left';
-            } else if (event.key === 'ArrowUp') {
+            } else if (event.key === 'ArrowUp' && direction !== 'down') {
                 direction = 'up';
-            } else if (event.key === 'ArrowDown') {
+            } else if (event.key === 'ArrowDown' && direction !== 'up') {
                 direction = 'down';
             }
         });
