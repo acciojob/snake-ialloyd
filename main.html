@@ -25,12 +25,13 @@
     </style>
 </head>
 <body>
-    <div class="scoreBoard">Score: <span id="score">0</span></div>
+    <div class="scoreBoard">Score: <span id="pointsEarned">0</span></div>
     <div id="gameContainer"></div>
-
+	
     <script>
         const gameContainer = document.querySelector('#gameContainer');
-        const scoreBoard = document.querySelector('#score');
+        const scoreBoard = document.querySelector('#pointsEarned');
+
         let score = 0;
         let food = null;
         let snake = [{x: 0, y: 20}];
